@@ -10,6 +10,10 @@ More info on FreeBSD on VBox here
 
 https://wiki.freebsd.org/VirtualBox
 
+## General reading
+
+* Getting started with the kernel; http://www.watson.org/~robert/freebsd/reading
+
 ## Basics
 
 Install software
@@ -26,6 +30,6 @@ http://ogris.de/howtos/freebsd-raspberry.html
 
 Some more references
 
-http://blog.khubla.com/freebsd/cross-compiling-freebsd-arm-on-amd-64
-https://wiki.freebsd.org/A_Brief_Guide_To_Cross_Compiling_FreeBSD
-http://allskyee.blogspot.co.uk/2014/02/freebsd-10-ports-cross-compile-amd64-to.html
+* http://blog.khubla.com/freebsd/cross-compiling-freebsd-arm-on-amd-64
+* https://wiki.freebsd.org/A_Brief_Guide_To_Cross_Compiling_FreeBSD
+* http://allskyee.blogspot.co.uk/2014/02/freebsd-10-ports-cross-compile-amd64-to.html

@@ -15,10 +15,9 @@ Altera Cyclone V Soc with dual-core ARM Cortex-A9s
 
 (no hardware virtualization, unfortunately...)
 
-## Documenentation
+## Documentation
 
-http://www.altera.co.uk/literature/lit-cyclone-v.jsp
-
-http://en.wikipedia.org/wiki/ARM_Cortex-A9_MPCore
+* http://www.altera.co.uk/literature/lit-cyclone-v.jsp
+* http://en.wikipedia.org/wiki/ARM_Cortex-A9_MPCore
 
 
