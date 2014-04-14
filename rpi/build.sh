@@ -1,14 +1,11 @@
 # this should be run from freebsd/usr/src
 
-export MAKEOBJDIRPREFIX=/home/andyman/github/mirage-fpga/rpi/freebsd/obj
-export TARGET=arm
-export TARGET_ARCH=arm
+. ./env.sh
 
-make kernel-toolchain
-make KERNCONF=RPI-B WITH_FDT=yes buildkernel
-make buildworld
+cd freebsd/usr/src
+make -j$NCPUS kernel-toolchain
+make -j$NCPUS KERNCONF=RPI-B WITH_FDT=yes buildkernel
+make -j$NCPUS buildworld
 
-# Instructions said this
-# make MALLOC_PRODUCTION=yes buildworld
-# but that causes errors
+# Instructions said this 'make MALLOC_PRODUCTION=yes buildworld' but that causes errors
 
