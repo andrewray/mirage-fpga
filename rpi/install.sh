@@ -4,7 +4,7 @@ set -e
 . ./env.sh
 
 # Change this
-export GPU_MEM=128
+export GPU_MEM=32
 export PI_USER=pi
 export PI_USER_PASSWORD=raspberry
 export SRCROOT=$ROOT/freebsd/usr/src
@@ -36,8 +36,9 @@ eval $buildenv make -C $SRCROOT/sys/boot clean
 eval $buildenv make -C $SRCROOT/sys/boot obj
 eval $buildenv make -C $SRCROOT/sys/boot UBLDR_LOADADDR=0x2000000 all
 
+# count=8 for 1 Gb
 rm -f $IMG
-dd if=/dev/zero of=$IMG bs=128M count=8
+dd if=/dev/zero of=$IMG bs=128M count=16
 MDFILE=`mdconfig -a -f $IMG`
 echo MDFILE = $MDFILE
 gpart create -s MBR ${MDFILE}
