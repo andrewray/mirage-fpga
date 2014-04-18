@@ -63,6 +63,34 @@ mkdir /usr/ports
 mount <ip_addr_of_server>:/home/.../freebsd/fs/ports /var/ports
 ```
 
+# Compiling ports
+
+Generally you do
+
+```
+$ cd /usr/ports/<package>
+$ make install clean
+```
+
+You can find dpendancies with targets like
+
+```
+$ make missing
+$ make build-depends-list
+$ make run-depends-list
+```
+
+This is useful to plan your day...some stuff takes *forever* to build.
+
+Once you have some packages you can
+
+```
+$ pkg create -a -o <dir>
+```
+
+To generate binary packages which should be installable with the `pkg` util
+on a clean build.
+
 # Compiling OCaml
 
 I am using the official 4.01.0 release tarball initially.
@@ -96,7 +124,7 @@ and preprocess.  Changing to `cc` gets this compiled.
 cc -c -DSYS_freebsd -DMODEL_armv6 -o arm.o arm.S
 ```
 
-Finally we modify asmcomp/arch.ml at the very top so that `Config.sysytem = "freebsd"` 
+Finally we modify asmcomp/arm/arch.ml at the very top so that `Config.system = "freebsd"` 
 maps to EABI.
 
 Now we can run `make opt` and get a native code compiler.  However, on running it we get
@@ -127,4 +155,27 @@ cc: error: linker command failed with exit code 1 (use -v to see invocation)
 File "caml_startup", line 1:
 Error: Error during linking
 ```
+
+## Fixes
+
+Created a new section at the top of arm.S specifically for SYS_freebsd which sets
+armv6 + softfp.
+
+Change the configure script to use `cc -c` for both AS and ASPP.
+
+This now builds an ocamlopt which generates binaries - and they run!
+
+Not much testing yet but I have built OPAM and it will at least print
+its help screen.
+
+## Next steps
+
+* Release the freebsd opam binaries on the github page.
+* Compile ocaml with world.opt to get the native `.opt` compilers
+* Create a patch for 4.01.0 so I can push a compiler target for
+  freebsd 10-release to opam and actually `-init` it.
+* binary compiler release as per 4.01.0+ocp-bin
+* Compile git
+* See if there is somewhere we can store binary packages
+
 
