@@ -63,4 +63,68 @@ mkdir /usr/ports
 mount <ip_addr_of_server>:/home/.../freebsd/fs/ports /var/ports
 ```
 
+# Compiling OCaml
+
+I am using the official 4.01.0 release tarball initially.
+
+Initially a `make world` seems to be OK and build a functioning interpreter.  Getting
+a native code compiler is a bit more effort.
+
+The `configure` script will not detect a native code compiler for this platform so
+we need to start hacking.  My first attempt was to add a clause
+
+```
+# Configure the native-code compiler
+...
+  armv6*-*-freebsd*) arch=arm; model=armv6; system=freebsd;;
+...
+```
+
+This requires a further change to asmrun/arm.S at the top.  
+
+```
+elif defined(Sys_linux_eabi) || defined(Sys_frebsd)
+```
+
+to get the clx macro defined.  This isnt exactly our architecture but it seems a
+reasonable lowest common denominator for now.
+
+Further arm.S does not compile correctly as the makefile uses `gcc` to assemble
+and preprocess.  Changing to `cc` gets this compiled.
+
+```
+cc -c -DSYS_freebsd -DMODEL_armv6 -o arm.o arm.S
+```
+
+Finally we modify asmcomp/arch.ml at the very top so that `Config.sysytem = "freebsd"` 
+maps to EABI.
+
+Now we can run `make opt` and get a native code compiler.  However, on running it we get
+
+```
+% ocamlopt test.ml
+/usr/bin/ld: ERROR: Source object /tmp/camlstartupd0882d.o has EABI version 0, but target a.out has EABI version 5
+/usr/bin/ld: failed to merge target specific data of file /tmp/camlstartupd0882d.o
+/usr/bin/ld: ERROR: Source object /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/std_exit.o has EABI version 0, but target a.out has EABI version 5
+/usr/bin/ld: failed to merge target specific data of file /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/std_exit.o
+/usr/bin/ld: ERROR: Source object test.o has EABI version 0, but target a.out has EABI version 5
+/usr/bin/ld: failed to merge target specific data of file test.o
+/usr/bin/ld: ERROR: Source object /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(pervasives.o) has EABI version 0, but target a.out has EABI version 5
+/usr/bin/ld: failed to merge target specific data of file /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(pervasives.o)
+/usr/bin/ld: ERROR: Source object /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(list.o) has EABI version 0, but target a.out has EABI version 5
+/usr/bin/ld: failed to merge target specific data of file /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(list.o)
+/usr/bin/ld: ERROR: Source object /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(char.o) has EABI version 0, but target a.out has EABI version 5
+/usr/bin/ld: failed to merge target specific data of file /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(char.o)
+/usr/bin/ld: ERROR: Source object /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(string.o) has EABI version 0, but target a.out has EABI version 5
+/usr/bin/ld: failed to merge target specific data of file /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(string.o)
+/usr/bin/ld: ERROR: Source object /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(sys.o) has EABI version 0, but target a.out has EABI version 5
+/usr/bin/ld: failed to merge target specific data of file /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(sys.o)
+/usr/bin/ld: ERROR: Source object /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(buffer.o) has EABI version 0, but target a.out has EABI version 5
+/usr/bin/ld: failed to merge target specific data of file /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(buffer.o)
+/usr/bin/ld: ERROR: Source object /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(printf.o) has EABI version 0, but target a.out has EABI version 5
+/usr/bin/ld: failed to merge target specific data of file /home/pi/dev/ocaml/ocaml-4.01.0-install/lib/ocaml/stdlib.a(printf.o)
+cc: error: linker command failed with exit code 1 (use -v to see invocation)
+File "caml_startup", line 1:
+Error: Error during linking
+```
 
