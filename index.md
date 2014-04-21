@@ -71,12 +71,13 @@ $ mount <ip-addr-of-server>:/path/to/ports /usr/ports
 try something like this to avoid having to compile `pkg`.
 
 ~~~
-$ fetch -o pkg.txz http://adrewray.github.io/mirage-fpga/packages/pkg-1.2.7_2.txz
-$ tar xf //pkg.txz -s “,/.*/,,g” “*/pkg-static”
-$ ./pkg-static add //pkg.txz
+$ fetch -o pkg.txz http://andrewray.github.io/mirage-fpga/packages/pkg-1.2.7_2.txz
+$ tar xf pkg.txz -s “,/.*/,,g” “*/pkg-static”
+$ ./pkg-static add pkg.txz
 ~~~
 
-_I havent tried this._
+_I havent tried this but the 1st 2 commands do seem to grab the pkg-static executable
+so it looks lik it might well work._
 
 ## Configuring pkg
 
