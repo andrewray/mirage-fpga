@@ -25,57 +25,14 @@ swap in order to be able to build OCaml later on through OPAM.
 Some binary packages are provided on this site, however, you first of all need
 to install the `pkg` tool.
 
-I compile this on the Raspberry PI.
-
-### Using portsnap on the RPI
-
-~~~
-$ portsnap fetch
-$ portsnap extract
-$ make -C /usr/port/ports-mgmt/pkg install clean
-~~~
-
-You will find the verification step takes hours to run and the ports packages
-use about 1GB of diskspace.
-
-### Using portsnap over NFS
-
-It is a lot quicker to install the ports on a x86 freebsd machine (in my case
-a VirtualBox VM) then [NFS](http://www.freebsd.org/doc/handbook/network-nfs.html) 
-mount it on the Raspberry PI.
-
-On the server;
-
-~~~
-$ portsnap -p /path/to/ports extract
-~~~
-
-and then configure `/etc/exports`
-
-~~~
-/path/to/ports -maproot=root <ip-addr-of-rpi>
-~~~
-
-As root on the RPI;
-
-~~~
-$ mkdir /usr/ports
-$ mount <ip-addr-of-server>:/path/to/ports /usr/ports
-~~~
-
-### Binary method
-
-[Apparently](http://kernelnomicon.org/?p=261) you can 
-try something like this to avoid having to compile `pkg`.
+You can do this by compiling it through ports on the RPI or use the following
+hack to bootstrap it (as root).
 
 ~~~
 $ fetch -o pkg.txz http://andrewray.github.io/mirage-fpga/packages/pkg-1.2.7_2.txz
 $ tar xf pkg.txz -s ",/.*/,,g" "*/pkg-static"
 $ ./pkg-static add pkg.txz
 ~~~
-
-_I havent tried this but the 1st 2 commands do seem to grab the pkg-static executable
-so it looks like it might well work._
 
 ## Configuring pkg
 
@@ -94,8 +51,10 @@ FreeBSD: {
 With a bit of luck you should now be able to install the packages provided.
 
 ~~~
-$ pkg install wget curl rsync gmake
+$ pkg install patch wget curl rsync gmake
 ~~~
+
+These are the ones you will need later to compile ocaml.
 
 Here are the packages I have compiled so far:
 
@@ -126,9 +85,6 @@ wget-1.15.txz
 
 ## Installing OCaml
 
-_in progress - I will shortly be sending a pull request to include the necessary
-compiler_
-
 From your home directory
 
 ~~~
@@ -138,6 +94,8 @@ $ mkdir bin
 $ mv opam.asm bin/opam
 $ rehash
 ~~~
+
+_The wget command seems to require `--no-check-certificate` at the moment._
 
 To compile ocaml
 
