@@ -14,9 +14,9 @@ I will need to find some other solution.__
 
 It is built using [freebsd-arm-tools](https://github.com/daveish/freebsd-arm-tools)
 
-```
+~~~
 $ sudo ./build-arm-image.sh -g 32 -s 3 -w 256
-```
+~~~
 
 * 3GB image (so requires a 4GB+ SD card)
 * 256MB of swap
@@ -31,11 +31,11 @@ I compile this on the Raspberry PI.
 
 ### Using portsnap on the RPI
 
-```
+~~~
 $ portsnap fetch
 $ portsnap extract
 $ make -C /usr/port/ports-mgmt/pkg install clean
-```
+~~~
 
 You will find the verification step takes hours to run and the ports packages
 use about 1GB of diskspace.
@@ -48,33 +48,33 @@ mount it on the Raspberry PI.
 
 On the server;
 
-```
+~~~
 $ portsnap -p /path/to/ports
-```
+~~~
 
 and then configure `/etc/exports`
 
-```
+~~~
 /path/to/ports -maproot=root <ip-addr-of-rpi>
-```
+~~~
 
 As root on the RPI;
 
-```
+~~~
 $ mkdir /usr/ports
 $ mount <ip-addr-of-server>:/path/to/ports
-```
+~~~
 
 ### Untested binary...
 
 [Apparently](http://kernelnomicon.org/?p=261) you can 
 try something like this to avoid having to compile `pkg`.
 
-```
+~~~
 $ fetch -o pkg.txz http://adrewray.github.io/mirage-fpga/packages/pkg-1.2.7_2.txz
 $ tar xf //pkg.txz -s “,/.*/,,g” “*/pkg-static”
 $ ./pkg-static add //pkg.txz
-```
+~~~
 
 _I havent tried this._
 
@@ -82,25 +82,25 @@ _I havent tried this._
 
 In `/etc/pkg/FreeBSD.conf`
 
-```
+~~~
 FreeBSD: {
   url: "pkg+http://andrewray.github.io/mirage-fpga/packages",
   mirror_type: "srv",
   enabled: yes
 }
-```
+~~~
 
 ## Installing packages
 
 With a bit of luck you should now be able to install the packages provided.
 
-```
+~~~
 $ pkg install wget curl rsync gmake
-```
+~~~
 
 Here are the packages I have compiled so far:
 
-```
+~~~
 bash-4.3.11.txz         
 gmake-3.82_1.txz        
 patch-2.7.1.txz
@@ -123,7 +123,7 @@ p5-Error-0.17022.txz
 vim-lite-7.4.256.txz
 gettext-0.18.3.1.txz        
 wget-1.15.txz
-```
+~~~
 
 ## Installing OCaml
 
@@ -132,19 +132,19 @@ compiler_
 
 From your home directory
 
-```
+~~~
 $ wget http://github.com/andrewray/mirage-fpga/releases/download/v0.1/opam.asm-1.1.tar.gz
 $ tar xzf opam.asm-1.1.tar.gz
 $ mkdir bin
 $ mv opam.asm bin/opam
 $ rehash
-```
+~~~
 
 To compile ocaml
 
-```
+~~~
 $ opam init --comp=4.01.0+armv6-freebsd
-```
+~~~
 
 Wait a couple of hours...
 
