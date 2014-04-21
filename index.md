@@ -49,7 +49,7 @@ mount it on the Raspberry PI.
 On the server;
 
 ~~~
-$ portsnap -p /path/to/ports
+$ portsnap -p /path/to/ports extract
 ~~~
 
 and then configure `/etc/exports`
@@ -62,7 +62,7 @@ As root on the RPI;
 
 ~~~
 $ mkdir /usr/ports
-$ mount <ip-addr-of-server>:/path/to/ports
+$ mount <ip-addr-of-server>:/path/to/ports /usr/ports
 ~~~
 
 ### Untested binary...
