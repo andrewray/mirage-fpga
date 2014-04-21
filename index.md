@@ -7,12 +7,7 @@ title: FreeBSD and OCaml on ARM
 
 ## FreeBSD image
 
-[Download](img/FreeBSD-stable10-r264702-ARMv6-RPI-B-3GB.img.tgz) (~146MB)
-
-__Actually this does not work as the image is too big to store on github so
-I will need to find some other solution.__
-
-It is built using [freebsd-arm-tools](https://github.com/daveish/freebsd-arm-tools)
+Build using [freebsd-arm-tools](https://github.com/daveish/freebsd-arm-tools)
 
 ~~~
 $ sudo ./build-arm-image.sh -g 32 -s 3 -w 256
@@ -21,6 +16,9 @@ $ sudo ./build-arm-image.sh -g 32 -s 3 -w 256
 * 3GB image (so requires a 4GB+ SD card)
 * 256MB of swap
 * 32MB GPU
+
+Note that if you have an older 256MB RPI then you must enable some
+swap in order to be able to build OCaml later on through OPAM.
 
 ## Packages
 
@@ -65,19 +63,19 @@ $ mkdir /usr/ports
 $ mount <ip-addr-of-server>:/path/to/ports /usr/ports
 ~~~
 
-### Untested binary...
+### Binary method
 
 [Apparently](http://kernelnomicon.org/?p=261) you can 
 try something like this to avoid having to compile `pkg`.
 
 ~~~
 $ fetch -o pkg.txz http://andrewray.github.io/mirage-fpga/packages/pkg-1.2.7_2.txz
-$ tar xf pkg.txz -s “,/.*/,,g” “*/pkg-static”
+$ tar xf pkg.txz -s ",/.*/,,g" "*/pkg-static"
 $ ./pkg-static add pkg.txz
 ~~~
 
 _I havent tried this but the 1st 2 commands do seem to grab the pkg-static executable
-so it looks lik it might well work._
+so it looks like it might well work._
 
 ## Configuring pkg
 
