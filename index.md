@@ -7,7 +7,8 @@ title: FreeBSD and OCaml on ARM
 
 ## FreeBSD image
 
-Build using [freebsd-arm-tools](https://github.com/daveish/freebsd-arm-tools)
+I have been building my images using [freebsd-arm-tools](https://github.com/daveish/freebsd-arm-tools)
+on a FreeBSD10 x86_64 VirtualBox VM.
 
 ~~~
 $ sudo ./build-arm-image.sh -g 32 -s 3 -w 256 -v svn://svn.freebsd.org/base/release/10.0.0 -r /src/FreeBSD/release/10
@@ -20,6 +21,10 @@ $ sudo ./build-arm-image.sh -g 32 -s 3 -w 256 -v svn://svn.freebsd.org/base/rele
 
 Note that if you have an older 256MB RPI then you must enable some
 swap in order to be able to build OCaml later on through OPAM.
+
+You can dramatically speed the build up by adding CPUs.  On my quad core I assign three cores
+to the VM then modify the build script in the **Build From Source** section around line 330.
+Add -j4 to each of the three make invocations.
 
 ## Packages
 
