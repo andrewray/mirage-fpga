@@ -10,12 +10,13 @@ title: FreeBSD and OCaml on ARM
 Build using [freebsd-arm-tools](https://github.com/daveish/freebsd-arm-tools)
 
 ~~~
-$ sudo ./build-arm-image.sh -g 32 -s 3 -w 256
+$ sudo ./build-arm-image.sh -g 32 -s 3 -w 256 -v svn://svn.freebsd.org/base/release/10.0.0 -r /src/FreeBSD/release/10
 ~~~
 
 * 3GB image (so requires a 4GB+ SD card)
 * 256MB of swap
 * 32MB GPU
+* Uses release/10 rather than stable/10 as I had some unexplained seg faults with the later
 
 Note that if you have an older 256MB RPI then you must enable some
 swap in order to be able to build OCaml later on through OPAM.
