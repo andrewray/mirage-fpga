@@ -60,33 +60,10 @@ With a bit of luck you should now be able to install the packages provided.
 $ pkg install patch wget curl rsync gmake
 ~~~
 
-These are the ones you will need later to compile ocaml.
-
-Here are the packages I have compiled so far:
+Get a list of packages in this repo with
 
 ~~~
-bash-4.3.11.txz         
-gmake-3.82_1.txz        
-patch-2.7.1.txz
-bison-2.7.1,1.txz       
-libgpg-error-1.12.txz       
-perl5-5.16.3_9.txz
-ca_root_nss-3.15.5.txz      
-libidn-1.28_1.txz       
-pkg-1.2.7_2.txz
-curl-7.36.0.txz         
-libtool-2.4.2_2.txz     
-pkgconf-0.9.5.txz
-dialog4ports-0.1.5_2.txz    
-libxml2-2.8.0_4.txz     
-rsync-3.1.0_3.txz
-m4-1.4.17_1,1.txz       
-unzip-6.0_1.txz
-getopt-1.1.5.txz        
-p5-Error-0.17022.txz        
-vim-lite-7.4.256.txz
-gettext-0.18.3.1.txz        
-wget-1.15.txz
+$ pkg rquery -a %n
 ~~~
 
 ## Installing OCaml
